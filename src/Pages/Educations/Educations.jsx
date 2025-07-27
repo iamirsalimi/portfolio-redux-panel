@@ -1,10 +1,25 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 import Modal from './../../Components/Modal/Modal'
+import { useForm } from "react-hook-form"
+import { addEducation as addEducationAction } from "../../Redux/EducationsSlice"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function Educations() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [formStatus , setFormStatus ] = useState('Add')
+  const [formStatus, setFormStatus] = useState('Add')
+
+  let dispatch = useDispatch()
+
+  let state = useSelector(state => state)
+  // console.log(state)
+
+  let {
+    register,
+    handleSubmit,
+    formState: { error }
+  } = useForm()
+
 
   const handleOpenDeleteModal = () => {
     setShowDeleteModal(true)
@@ -14,15 +29,17 @@ export default function Educations() {
   }
 
   const showUserInfos = () => {
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0)
     setFormStatus('Edit')
-  } 
-
-  const addExperience = e => {
-    alert('add Education')
   }
-  const editExperience = e => {
-    alert('edit Education')
+
+  const addEducation = data => {
+    console.log('add' , data)
+    dispatch(addEducationAction(data))
+  }
+  const editEducation = data => {
+    console.log('update' , data)
+    dispatch(addEducationAction(data))
   }
 
   return (
@@ -31,43 +48,72 @@ export default function Educations() {
 
         <div className="flex flex-col gap-4">
           <h1 className="text-sky-500 font-bold text-2xl">{formStatus} Education</h1>
-          <form className="w-full">
-            <div class="w-full grid grid-cols-1 gap-x-2 gap-y-4 mb-6 md:grid-cols-2">
+          <form className="w-full" onSubmit={handleSubmit(formStatus === 'Add' ? addEducation : editEducation)}>
+            <div className="w-full grid grid-cols-1 gap-x-2 gap-y-4 mb-6 md:grid-cols-2">
               <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
-                <label for="ExperienceTitle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Education Title</label>
-                <input type="text" id="ExperienceTitle" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Back-End Developer / Front-End Developer" required />
+                <label for="EducationTitle" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Education Title</label>
+                <input
+                  type="text"
+                  id="EducationTitle"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="SoftWare Engineering /Cyber Security"
+                  {...register('major')}
+                />
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
-                <label for="university" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">place of study</label>
-                <input type="text" id="university" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cambridge,Harvard,..." required />
+                <label for="university" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">place of study</label>
+                <input
+                  type="text"
+                  id="university"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Cambridge,Harvard,..."
+                  {...register('university')}
+                />
               </div>
               <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
-                <label for="EducationTime" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of work Education</label>
-                <input type="text" id="EducationTime" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Summer 2022" required />
+                <label for="EducationTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of work Education</label>
+                <input
+                  type="text"
+                  id="EducationTime"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Summer 2022"
+                  {...register('time')}
+                />
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
-                <label for="Country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                <input type="number" id="Country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Montreal,NewYork,..." required />
+                <label for="Country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+                <input
+                  type="text"
+                  id="Country"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="UK,Germany,..."
+                  {...register('country')}
+                />
               </div>
 
               <div className="col-start-1 col-end-3">
-                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your Education Description here..."></textarea>
+                <label for="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                <textarea
+                  id="description"
+                  rows="4"
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write your Education Description here..."
+                  {...register('description')}
+                ></textarea>
               </div>
 
-              <div className={`col-start-1 col-end-3 grid grid-cols-${formStatus== 'Edit' ? 2 : 1} gap-2`}>
+              <div className={`col-start-1 col-end-3 grid grid-cols-${formStatus == 'Edit' ? 2 : 1} gap-2`}>
                 {formStatus === 'Edit' && (
                   <button
-                  type="submit"
-                  className="mt-2 text-white font-bold bg-red-700 transition-colors duration-200 hover:bg-red-800 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                  onClick={() => setFormStatus('Add')}
-                  >Clear</button>
+                    type="submit"
+                    className="mt-2 text-white font-bold bg-red-700 transition-colors duration-200 hover:bg-red-800 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                    onClick={() => setFormStatus('Add')}
+                  >Cancel</button>
                 )}
-                
+
                 <button
-                type="submit"
-                className="mt-2 text-white font-bold bg-blue-700 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={formStatus === 'Add' ? addExperience : editExperience}
+                  type="submit"
+                  className="mt-2 text-white font-bold bg-blue-700 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >{formStatus}</button>
               </div>
             </div>
@@ -77,45 +123,45 @@ export default function Educations() {
         <div className="flex flex-col gap-4">
           <h1 className="text-sky-500 font-bold text-2xl">Educations</h1>
 
-          <div class="relative w-full overflow-x-auto">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <div className="relative w-full overflow-x-auto">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" class="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center">
                     ID
                   </th>
-                  <th scope="col" class="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center">
                     Education Title
                   </th>
 
-                  <th scope="col" class="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center">
                     University
                   </th>
 
-                  <th scope="col" class="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center">
                     Location
                   </th>
 
-                  <th scope="col" class="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center">
                     Status
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" class="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     1
                   </th>
-                  <td class="px-6 py-2 text-center">
+                  <td className="px-6 py-2 text-center">
                     Master Software Engineer
                   </td>
-                  <td class="px-6 py-2 text-center">
+                  <td className="px-6 py-2 text-center">
                     Harvard
                   </td>
-                  <td class="px-6 py-2 text-center">
+                  <td className="px-6 py-2 text-center">
                     summer 2023
                   </td>
-                  <td class="px-6 py-2 flex items-center justify-center gap-2">
+                  <td className="px-6 py-2 flex items-center justify-center gap-2">
                     <button
                       className="p-2 rounded-md bg-sky-200 hover:bg-sky-500 transition-colors duration-200 cursor-pointer group"
                       onClick={showUserInfos}
