@@ -66,6 +66,11 @@ export default function Educations() {
   const removeEducation = () => {
     dispatch(removeEducationAction(removeId))
     handleCloseDeleteModal()
+    // we should check if user decided to delete an education while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
+    if (removeId == editId) {
+      setFormStatus('Add')
+      clearInputs()
+    }
   }
 
   return (
@@ -224,7 +229,6 @@ export default function Educations() {
             )}
           </div>
         </div>
-
       </div>
 
       {/* modal */}
