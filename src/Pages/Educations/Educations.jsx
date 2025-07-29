@@ -16,7 +16,7 @@ export default function Educations() {
 
   // get educations from state
   let state = useSelector(state => state.educations)
-  console.log(state)
+  // console.log(state)
 
   let {
     register,

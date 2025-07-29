@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useForm } from "react-hook-form"
 import { addPersonalInfo } from "../../Redux/PersonalInformation"
@@ -7,19 +7,34 @@ import { useDispatch, useSelector } from "react-redux"
 export default function PersonalInfos() {
     let dispatch = useDispatch()
 
-    let state = useSelector(state => state)
-    console.log(state)
+    let state = useSelector(state => state.personalInformation)
+    // console.log(state)
 
     let {
         register,
         handleSubmit,
-        formState: { error }
+        formState: { errors },
+        setValue
     } = useForm()
 
     const editPersonalInfo = data => {
         // console.log(data)
         dispatch(addPersonalInfo(data))
     }
+    
+    useEffect(() => {
+        let {fullName , experience , email , expertise , satisfiedClients , linkedinLink , instagramLink , XLink , githubLink , biography} = state.personalInformation
+        setValue('fullName' , fullName)
+        setValue('experience' , experience)
+        setValue('email' , email)
+        setValue('expertise' , expertise)
+        setValue('satisfiedClients' , satisfiedClients)
+        setValue('linkedinLink' , linkedinLink)
+        setValue('instagramLink' , instagramLink)
+        setValue('XLink' , XLink)
+        setValue('githubLink' , githubLink)
+        setValue('biography' , biography)
+    } , [])
 
     return (
         <div className="flex flex-col gap-4">
