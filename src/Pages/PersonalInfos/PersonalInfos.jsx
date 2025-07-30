@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
 
 import { useForm } from "react-hook-form"
-import { addPersonalInfo } from "../../Redux/PersonalInformation"
+import { fetchPersonalInformation, editPersonalInformation } from "../../Redux/PersonalInformation"
 import { useDispatch, useSelector } from "react-redux"
+import toast from "react-hot-toast"
+
+let toastId = null;
 
 export default function PersonalInfos() {
     let dispatch = useDispatch()
 
-    let state = useSelector(state => state.personalInformation)
+    let {status , err , personalInformation} = useSelector(state => state.personalInformation)
     // console.log(state)
 
     let {
@@ -18,23 +21,39 @@ export default function PersonalInfos() {
     } = useForm()
 
     const editPersonalInfo = data => {
-        // console.log(data)
-        dispatch(addPersonalInfo(data))
+        // to have the id of toast , in case if our request got fulfilled or rejected
+        toastId = toast.loading('editing your details')
+        dispatch(editPersonalInformation(data))
     }
-    
+
     useEffect(() => {
-        let {fullName , experience , email , expertise , satisfiedClients , linkedinLink , instagramLink , XLink , githubLink , biography} = state.personalInformation
-        setValue('fullName' , fullName)
-        setValue('experience' , experience)
-        setValue('email' , email)
-        setValue('expertise' , expertise)
-        setValue('satisfiedClients' , satisfiedClients)
-        setValue('linkedinLink' , linkedinLink)
-        setValue('instagramLink' , instagramLink)
-        setValue('XLink' , XLink)
-        setValue('githubLink' , githubLink)
-        setValue('biography' , biography)
-    } , [])
+        dispatch(fetchPersonalInformation())
+    }, [])
+
+    useEffect(() => {
+        // console.log(personalInformation)
+        if (status == 'succeed') {
+            let { fullName, experience, email, expertise, satisfiedClients, linkedinLink, instagramLink, XLink, githubLink, biography } = personalInformation
+            setValue('fullName', fullName)
+            setValue('experience', experience)
+            setValue('email', email)
+            setValue('expertise', expertise)
+            setValue('satisfiedClients', satisfiedClients)
+            setValue('linkedinLink', linkedinLink)
+            setValue('instagramLink', instagramLink)
+            setValue('XLink', XLink)
+            setValue('githubLink', githubLink)
+            setValue('biography', biography)
+        }
+    }, [personalInformation])
+
+    useEffect(() => {
+        // to check if details updated or faced an error close loading toast and show the error or success toast
+        if(['succeed' , 'failed'].includes(status) && toastId != null){
+            toast.dismiss(toastId)
+            toastId = null
+        }
+    } , [status])
 
     return (
         <div className="flex flex-col gap-4">
@@ -112,7 +131,7 @@ export default function PersonalInfos() {
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Your Instagram Link"
                             {...register('instagramLink')}
-                            required />
+                        />
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                         <label for="xLink" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">X Link</label>
@@ -122,7 +141,7 @@ export default function PersonalInfos() {
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Your X Link"
                             {...register('XLink')}
-                            required />
+                        />
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                         <label for="githubLink" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GitHub Link</label>
@@ -132,7 +151,7 @@ export default function PersonalInfos() {
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Your GitHub Link"
                             {...register('githubLink')}
-                            required />
+                        />
                     </div>
 
                     <div className="col-start-1 col-end-3">
@@ -140,7 +159,7 @@ export default function PersonalInfos() {
                         <textarea
                             id="message"
                             rows="4"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            class="block p-2.5 w-full min-h-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Write your Biography here..."
                             {...register('biography')}
                         ></textarea>
@@ -162,8 +181,9 @@ export default function PersonalInfos() {
 
                     <button
                         type="submit"
-                        className="col-start-1 col-end-3 mt-2 text-white font-bold bg-blue-700 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >Edit</button>
+                        className="col-start-1 col-end-3 mt-2 text-white font-bold bg-blue-700 disabled:bg-blue-300 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        disabled={status == 'loading'}
+                    >{status == 'loading' ? 'Editing ...' : 'Edit' }</button>
 
                 </div>
             </form>
