@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import PersonalInformationReducer from './PersonalInformation'; 
+import PersonalInformationReducer from './PersonalInformationSlice'; 
 import EducationsReducer from './EducationsSlice'; 
 import ExperiencesReducer from './ExperiencesSlice'; 
 

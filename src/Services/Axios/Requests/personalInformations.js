@@ -8,7 +8,6 @@ const getPersonalInformation = async () => {
     })
 }
 
-
 const updatePersonalInformation = async (newPersonalInfos) => {
     return await axios.patch('/PersoanlInformations' ,newPersonalInfos , {
         params : {
