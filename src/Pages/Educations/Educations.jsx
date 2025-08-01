@@ -1,9 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux"
+import toast from 'react-hot-toast'
+
+import { fetchEducations, postEducation, editEducation as editEducationHandler, removeEducation as removeEducationHandler } from "./../../Redux/EducationsSlice"
 
 import Modal from './../../Components/Modal/Modal'
-import { useForm } from "react-hook-form"
-import { addEducation as addEducationAction, updateEducation as updateEducationAction, removeEducation as removeEducationAction } from "../../Redux/EducationsSlice"
-import { useDispatch, useSelector } from "react-redux"
+import Loading from '../../Components/Loading/Loading'
+
+let toastId = null
+let updateToastId = null
+let removeToastId = null
 
 export default function Educations() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -15,8 +23,8 @@ export default function Educations() {
   let dispatch = useDispatch()
 
   // get educations from state
-  let state = useSelector(state => state.educations)
-  // console.log(state)
+  let { status, err, educations } = useSelector(state => state.educations)
+  // console.log(educations)
 
   let {
     register,
@@ -51,20 +59,23 @@ export default function Educations() {
   }
 
   const addEducation = data => {
-    console.log('add', data)
-    dispatch(addEducationAction({ id: crypto.randomUUID(), ...data }))
+    console.log('add', data, { toastId, newEducationObj: { ...data } })
+    toastId = toast.loading('adding Education...')
+    dispatch(postEducation({ toastId, newEducationObj: { ...data } }))
     clearInputs()
   }
 
   const editEducation = data => {
-    console.log('update', data)
+    // console.log('update', data)
+    updateToastId = toast.loading('updating Education...')
     setFormStatus('Add')
-    dispatch(updateEducationAction({ id: editId, ...data }))
+    dispatch(editEducationHandler({ toastId: updateToastId , id: editId , newEducationObj: { ...data } }))
     clearInputs()
   }
 
   const removeEducation = () => {
-    dispatch(removeEducationAction(removeId))
+    removeToastId = toast.loading('removing Education...')
+    dispatch(removeEducationHandler({ toastId: removeToastId, id: removeId }))
     handleCloseDeleteModal()
     // we should check if user decided to delete an education while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
     if (removeId == editId) {
@@ -72,6 +83,18 @@ export default function Educations() {
       clearInputs()
     }
   }
+
+  useEffect(() => {
+    dispatch(fetchEducations())
+  }, [])
+
+  useEffect(() => {
+    if (['fetch-succeed' , 'add-succeed' , 'update-succeed' , 'remove-succeed'].includes(status)) {
+      toastId = null
+      updateToastId = null
+      removeToastId = null
+    }
+  }, [status])
 
   return (
     <>
@@ -182,8 +205,8 @@ export default function Educations() {
                 </tr>
               </thead>
               <tbody>
-                {state.educations?.map(education => (
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                {status != 'pending' && educations?.map(education => (
+                  <tr key={education.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {education.id}
                     </th>
@@ -194,7 +217,7 @@ export default function Educations() {
                       {education.university}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {education.time}
+                      {education.country}
                     </td>
                     <td className="px-6 py-2 flex items-center justify-center gap-2">
                       <button
@@ -224,9 +247,18 @@ export default function Educations() {
               </tbody>
             </table>
 
-            {state.educations.length == 0 && (
-              <span className="inline-block w-full text-center justify-center text-sky-500 font-semibold !my-2">there is no Education yet</span>
+            {['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) && educations.length == 0 && (
+              <span className="inline-block w-full text-center text-sky-500 font-semibold !my-2">there is no Education yet</span>
             )}
+
+            {status == 'pending' && (
+              <Loading title="Education" />
+            )}
+
+            {status == 'fetch-failed' && (
+              <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
+            )}
+
           </div>
         </div>
       </div>

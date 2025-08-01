@@ -1,9 +1,17 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
+
+import { useForm } from "react-hook-form"
+import toast from 'react-hot-toast'
+import { useDispatch, useSelector } from "react-redux"
+
+import { fetchExperiences, postExperience, editExperience as editExperienceHandler, removeExperience as removeExperienceHandler } from "./../../Redux/ExperiencesSlice"
 
 import Modal from './../../Components/Modal/Modal'
-import { useForm } from "react-hook-form"
-import { addExperience as addExperienceAction, updateExperience as updateExperienceAction, removeExperience as removeExperienceAction } from "../../Redux/ExperiencesSlice"
-import { useDispatch, useSelector } from "react-redux"
+import Loading from '../../Components/Loading/Loading'
+
+let toastId = null
+let updateToastId = null
+let removeToastId = null
 
 export default function Experiences() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -15,8 +23,8 @@ export default function Experiences() {
 
   let dispatch = useDispatch()
 
-  let state = useSelector(state => state.experiences)
-  // console.log(state)
+  let { status, err, experiences } = useSelector(state => state.experiences)
+  // console.log(experiences)
 
   let {
     register,
@@ -52,29 +60,43 @@ export default function Experiences() {
     setValue('description', '')
   }
 
+
   const addExperience = data => {
-    // console.log('add' , data)
-    dispatch(addExperienceAction({ id: crypto.randomUUID(), ...data }))
+    toastId = toast.loading('adding Experience...')
+    dispatch(postExperience({ toastId, newExperienceObj: { ...data } }))
     clearInputs()
   }
 
   const editExperience = data => {
-    // console.log('update' , data)
-    console.log('update', data)
+    updateToastId = toast.loading('updating Experience...')
     setFormStatus('Add')
-    dispatch(updateExperienceAction({ id: editId, ...data }))
+    console.log({ ...data })
+    dispatch(editExperienceHandler({ toastId : updateToastId , id : editId , newExperienceObj : { ...data }}))
     clearInputs()
   }
 
   const removeExperience = () => {
-    dispatch(removeExperienceAction(removeId))
+    removeToastId = toast.loading('removing Experience...')
+    dispatch(removeExperienceHandler({ toastId: removeToastId, id: removeId }))
     handleCloseDeleteModal()
-    // we should check if user decided to delete an experience while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
+    // we should check if user decided to delete an education while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
     if (removeId == editId) {
       setFormStatus('Add')
       clearInputs()
     }
   }
+
+  useEffect(() => {
+    dispatch(fetchExperiences())
+  }, [])
+
+  useEffect(() => {
+    if (['fetch-succeed', 'add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
+      toastId = null
+      updateToastId = null
+      removeToastId = null
+    }
+  }, [status])
 
   return (
     <>
@@ -104,7 +126,7 @@ export default function Experiences() {
                 />
               </div>
               <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
-                <label for="ExperienceTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of work experience</label>
+                <label for="ExperienceTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of experience</label>
                 <input
                   type="text"
                   id="ExperienceTime"
@@ -182,7 +204,7 @@ export default function Experiences() {
                   </th>
 
                   <th scope="col" className="px-6 py-3 text-center">
-                    Time of Work Experience
+                    Time of Experience
                   </th>
 
                   <th scope="col" className="px-6 py-3 text-center">
@@ -195,8 +217,8 @@ export default function Experiences() {
                 </tr>
               </thead>
               <tbody>
-                {state.experiences?.map(experience => (
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                {experiences?.map(experience => (
+                  <tr key={experience.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}
                     </th>
@@ -236,8 +258,16 @@ export default function Experiences() {
                 ))}
               </tbody>
             </table>
-            {state.experiences.length == 0 && (
-              <span className="inline-block w-full text-center justify-center text-sky-500 font-semibold !my-2">there is no Experience yet</span>
+            {['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) && experiences.length == 0 && (
+              <span className="inline-block w-full text-center text-sky-500 font-semibold !my-2">there is no Experience yet</span>
+            )}
+
+            {status == 'pending' && (
+              <Loading title="Experience" />
+            )}
+
+            {status == 'fetch-failed' && (
+              <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
           </div>
         </div>
