@@ -13,14 +13,14 @@ const addEducation = async (data) => {
 }
 
 const updateEducation = async (id , data) => {
-    return await axios.post('/Educations' , data , {
+    return await axios.patch('/Educations' , data , {
         params : {
             id : `eq.${id}`
         }
     })
 }
 
-const deleteEducation = async (id , data) => {
+const deleteEducation = async (id) => {
     return await axios.delete('/Educations', {
         params : {
             id : `eq.${id}`

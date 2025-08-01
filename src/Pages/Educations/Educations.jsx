@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
+import toast from 'react-hot-toast'
 
 import { fetchEducations, postEducation, editEducation as editEducationHandler, removeEducation as removeEducationHandler } from "./../../Redux/EducationsSlice"
 
 import Modal from './../../Components/Modal/Modal'
-import toast from 'react-hot-toast'
+import Loading from '../../Components/Loading/Loading'
 
 let toastId = null
 let updateToastId = null
@@ -68,7 +69,7 @@ export default function Educations() {
     // console.log('update', data)
     updateToastId = toast.loading('updating Education...')
     setFormStatus('Add')
-    dispatch(editEducationHandler({ toastId: updateToastId, newEducationObj: { id: editId, ...data } }))
+    dispatch(editEducationHandler({ toastId: updateToastId , id: editId , newEducationObj: { ...data } }))
     clearInputs()
   }
 
@@ -88,8 +89,10 @@ export default function Educations() {
   }, [])
 
   useEffect(() => {
-    if (['add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
-      toast.dismiss(status == 'add-succeed' ? toastId : status == 'update-succeed' ? updateToastId : removeToastId)
+    if (['fetch-succeed' , 'add-succeed' , 'update-succeed' , 'remove-succeed'].includes(status)) {
+      toastId = null
+      updateToastId = null
+      removeToastId = null
     }
   }, [status])
 
@@ -203,7 +206,7 @@ export default function Educations() {
               </thead>
               <tbody>
                 {status != 'pending' && educations?.map(education => (
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr key={education.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {education.id}
                     </th>
@@ -249,13 +252,10 @@ export default function Educations() {
             )}
 
             {status == 'pending' && (
-              <span className="flex items-center justify-center gap-2 w-full text-center text-sky-500 font-semibold !my-2">
-                <span>getting Educations List</span>
-                <span className="w-4 h-4 border-2 border-gray-300 border-t-sky-500 rounded-full animate-spin"></span>
-              </span>
+              <Loading title="Education" />
             )}
 
-            {['fetch-failed', 'add-failed', 'remove-failed', 'update-failed'].includes(status) && (
+            {status == 'fetch-failed' && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
 

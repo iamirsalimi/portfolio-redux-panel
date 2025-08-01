@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getEducations, addEducation as addEducationHandler, deleteEducation } from "../Services/Axios/Requests/Educations";
+import { getEducations, addEducation as addEducationHandler, updateEducation ,  deleteEducation } from "../Services/Axios/Requests/Educations";
 import toast from "react-hot-toast";
 
 export const fetchEducations = createAsyncThunk(
@@ -24,8 +24,8 @@ export const postEducation = createAsyncThunk(
 export const editEducation = createAsyncThunk(
     'Educations/patchEducation',
     async (payload, { dispatch, getState }) => {
-        let res = await addEducationHandler(payload.newEducationObj.id, payload.newEducationObj.data)
-        // console.log(res)
+        let res = await updateEducation(payload.id, payload.newEducationObj)
+        console.log(res , payload)
         return payload
     }
 )
@@ -49,7 +49,7 @@ let slice = createSlice({
     extraReducers: builder => {
         // get educations
         builder.addCase(fetchEducations.fulfilled, (state, action) => {
-            state.educations = action.payload.data
+            state.educations = action.payload.data.sort((a,b) => a.id - b.id)
             state.status = 'fetch-succeed'
             state.err = false
         })
@@ -90,7 +90,7 @@ let slice = createSlice({
             toast.dismiss(action.meta.arg.toastId)
             toast.success('Education has updated successfully')
             // console.log(action.payload.newEducationObj.id)
-            state.educations = state.educations.map(education => education.id == action.payload.newEducationObj.id ? action.payload.newEducationObj : education)
+            state.educations = state.educations.map(education => education.id == action.payload.id ? {id : action.payload.id , ...action.payload.newEducationObj} : education)
             state.status = 'update-succeed'
             state.err = false
         })
