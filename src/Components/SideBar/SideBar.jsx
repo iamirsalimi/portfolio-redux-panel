@@ -78,7 +78,7 @@ export default function SideBar({ theme, changeTheme }) {
                     <ul className="space-y-2 font-medium">
                         {links.map(link => (
                             <li onClick={() => setShowPanel(false)}>
-                                <NavLink to={`/portfolio-redux-panel/${link.title === 'Personal Informations' ? '' : link.title}`} className="flex items-center transition-colors duration-200 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-black/20 group">
+                                <NavLink to={`/portfolio-redux-panel${link.title === 'Personal Informations' ? '' : `/${link.title}`}`} className="flex items-center transition-colors duration-200 p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-black/20 group" end>
                                     {link.svg}
                                     <span className="flex-1 ms-3 whitespace-nowrap font-bold text-gray-600 dark:text-gray-500">{link.title}</span>
                                 </NavLink>

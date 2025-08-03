@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="flex flex-col sm:flex-row bg-white dark:bg-secondary">
       <SideBar theme={localTheme} changeTheme={changeTheme} />
-      <div className="p-5 ml-auto w-full h-full sm:w-[calc(100%-16rem)]">
+      <div className="p-5 ml-auto w-full h-full min-h-screen sm:w-[calc(100%-16rem)] bg-white dark:bg-secondary">
         {router}
       </div>
       <Toaster
