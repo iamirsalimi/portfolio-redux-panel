@@ -98,7 +98,6 @@ export default function PersonalInfos() {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-sky-500 font-bold text-2xl">Personal Informations</h1>
-
             </div>
             <form className="w-full" onSubmit={handleSubmit(editPersonalInfo)}>
                 <div className="w-full grid grid-cols-1 gap-x-2 gap-y-4 mb-6 md:grid-cols-2">
@@ -225,7 +224,7 @@ export default function PersonalInfos() {
                         <textarea
                             id="message"
                             rows="4"
-                            className="block p-2.5 w-full min-h-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="block p-2.5 w-full min-h-36 lg:min-h-28 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Write your Biography here..."
                             {...register('biography')}
                         ></textarea>
