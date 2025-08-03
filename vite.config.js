@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  base : '/portfolio-redux-panel',
   resolve: {
     alias: {
       '@': '/src'
