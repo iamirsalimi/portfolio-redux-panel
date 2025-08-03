@@ -132,7 +132,7 @@ export default function Experiences() {
                 <input
                   type="text"
                   id="ExperienceTitle"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Back-End Developer / Front-End Developer"
                   {...register('experienceTitle')}
                 />
@@ -145,7 +145,7 @@ export default function Experiences() {
                 <input
                   type="text"
                   id="Company"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Google,Amazon,..."
                   {...register('company')}
                 />
@@ -158,7 +158,7 @@ export default function Experiences() {
                 <input
                   type="text"
                   id="ExperienceTime"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="2022 Summer"
                   {...register('time')}
                 />
@@ -171,7 +171,7 @@ export default function Experiences() {
                 <input
                   type="text"
                   id="city"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Montreal,NewYork,..."
                   {...register('city')}
                 />
@@ -184,7 +184,7 @@ export default function Experiences() {
                 <input
                   type="text"
                   id="Country"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="UK,Germany,..."
                   {...register('country')}
                 />
@@ -198,7 +198,7 @@ export default function Experiences() {
                 <textarea
                   id="description"
                   rows="4"
-                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your Experience Description here..."
                   {...register('description')}
                 ></textarea>
@@ -230,9 +230,22 @@ export default function Experiences() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <h1 className="text-sky-500 font-bold text-2xl">Experiences</h1>
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-5">
+            <h1 className="text-sky-500 font-bold text-lg md:text-xl lg:text-2xl">Experiences</h1>
+            <div className="w-full xs:w-1/2 md:w-1/3 relative">
+              <input
+                type="text"
+                id="Country"
+                className="peer border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-secondary dark:outline-none dark:border-gray-600 dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="SEO,Front-End,..."
+                value={searchTitle}
+                onChange={e => setSearchTitle(e.target.value)}
+              />
+              <label for="Country" className="peer-focus:text-blue-500 transition-colors font-bold block mb-2 text-sm text-gray-500 dark:text-white absolute -top-4 left-5 bg-white dark:bg-secondary px-2 py-1">Search</label>
+            </div>
+          </div>
 
-          <div className="relative w-full overflow-x-auto bg-gray-100 rounded-lg">
+          <div className="relative w-full overflow-x-auto bg-gray-100 dark:bg-gray-900 rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-lg">
                 <tr>
@@ -257,8 +270,8 @@ export default function Experiences() {
                 </tr>
               </thead>
               <tbody>
-                {status != 'pending' && experiences?.map(experience => (
-                  <tr key={experience.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                {status != 'pending' && filteredExperiences?.map(experience => (
+                  <tr key={experience.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}
                     </th>

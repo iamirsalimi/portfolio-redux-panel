@@ -7,7 +7,7 @@
 }
 
 .active {
-  @apply text-white bg-slate-700 hover:!bg-slate-600;
+  @apply text-white bg-slate-700 hover:!bg-slate-600 dark:bg-secondary dark:hover:!bg-white/5;
 }
 
 .active span {
@@ -22,14 +22,24 @@
   @apply !w-full rounded-md;
 }
 
-@layer base{
-    h1{
-        @apply text-4xl font-bold;
-    }
-    h2{
-        @apply text-2xl font-bold;
-    }
-    h3{
-        @apply text-xl font-bold;
-    }
+@layer base {
+  h1 {
+    @apply text-4xl font-bold;
+  }
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  h3 {
+    @apply text-xl font-bold;
+  }
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --breakpoint-xs: 30rem;
+
+  --color-primary: #1b1c22 ;
+  --color-secondary: #23242a ;
+
 }
