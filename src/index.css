@@ -5,7 +5,7 @@
 }
 
 .active {
-  @apply text-white bg-slate-700 hover:!bg-slate-600;
+  @apply text-white bg-slate-700 hover:!bg-slate-600 dark:bg-secondary dark:hover:!bg-white/5;
 }
 
 .active span {
@@ -32,6 +32,12 @@
   }
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --breakpoint-xs: 30rem;
+
+  --color-primary: #1b1c22 ;
+  --color-secondary: #23242a ;
+
 }

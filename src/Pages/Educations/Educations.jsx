@@ -135,7 +135,7 @@ export default function Educations() {
                 <input
                   type="text"
                   id="EducationTitle"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="SoftWare Engineering /Cyber Security"
                   {...register('major')}
                 />
@@ -148,7 +148,7 @@ export default function Educations() {
                 <input
                   type="text"
                   id="university"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Cambridge,Harvard,..."
                   {...register('university')}
                 />
@@ -161,7 +161,7 @@ export default function Educations() {
                 <input
                   type="text"
                   id="EducationTime"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Summer 2022"
                   {...register('time')}
                 />
@@ -174,7 +174,7 @@ export default function Educations() {
                 <input
                   type="text"
                   id="Country"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="UK,Germany,..."
                   {...register('country')}
                 />
@@ -188,7 +188,7 @@ export default function Educations() {
                 <textarea
                   id="description"
                   rows="4"
-                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-primary dark:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your Education Description here..."
                   {...register('description')}
                 ></textarea>
@@ -225,16 +225,16 @@ export default function Educations() {
               <input
                 type="text"
                 id="Country"
-                className="peer border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="peer border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-secondary dark:outline-none dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="IT,Cyber Security,..."
                 value={searchTitle}
                 onChange={e => setSearchTitle(e.target.value)}
               />
-              <label for="Country" className="peer-focus:text-blue-500 transition-colors font-bold block mb-2 text-sm text-gray-500 dark:text-white absolute -top-4 left-5 bg-white px-2 py-1">Search</label>
+              <label for="Country" className="peer-focus:text-blue-500 transition-colors font-bold block mb-2 text-sm text-gray-500 dark:text-white absolute -top-4 left-5 bg-white dark:bg-secondary px-2 py-1">Search</label>
             </div>
           </div>
 
-          <div className="relative w-full overflow-x-auto bg-gray-100 rounded-lg">
+          <div className="relative w-full overflow-x-auto bg-gray-100 dark:bg-gray-900 rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-lg">
                 <tr>
@@ -260,7 +260,7 @@ export default function Educations() {
               </thead>
               <tbody>
                 {status != 'pending' && filteredEducations?.map(education => (
-                  <tr key={education.id} className={`border-b border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
+                  <tr key={education.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {education.id}
                     </th>
