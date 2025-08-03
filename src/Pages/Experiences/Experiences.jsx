@@ -239,19 +239,19 @@ export default function Experiences() {
                   <th scope="col" className="px-6 py-3 text-center">
                     ID
                   </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Experience Title
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Time of Experience
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Location
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Status
                   </th>
                 </tr>
@@ -265,10 +265,10 @@ export default function Experiences() {
                     <td className="px-6 py-2 text-center">
                       {experience.experienceTitle}
                     </td>
-                    <td className="px-6 py-2 text-center">
+                    <td className="px-6 py-2 text-center min-w-52">
                       {experience.time}
                     </td>
-                    <td className="px-6 py-2 text-center">
+                    <td className="px-6 py-2 text-center min-w-52">
                       {experience.city} , {experience.country}
                     </td>
                     <td className="px-6 py-2 flex items-center justify-center gap-2">

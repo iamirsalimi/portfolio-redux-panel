@@ -68,7 +68,7 @@ let slice = createSlice({
         builder.addCase(postExperience.fulfilled, (state, action) => {
             toast.dismiss(action.meta.arg.toastId)
             toast.success('Experience has added successfully')
-            state.experiences = [...state.experiences, action.meta.arg]
+            state.experiences = [...state.experiences, action.meta.arg.newExperienceObj]
             state.status = 'add-succeed'
             state.err = false
         })

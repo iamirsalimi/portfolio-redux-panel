@@ -31,7 +31,7 @@ export default function SideBar() {
                     data-drawer-toggle="default-sidebar"
                     aria-controls="default-sidebar"
                     type="button"
-                    className="inline-flex w-fit top-5 left-5 items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg transition-colors sm:hidden hover:bg-gray-100 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex w-fit top-5 left-5 items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg transition-colors sm:hidden hover:bg-gray-100 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 cursor-pointer"
                     onClick={() => setShowPanel(prev => !prev)}
                 >
                     <span className="sr-only">Open sidebar</span>
