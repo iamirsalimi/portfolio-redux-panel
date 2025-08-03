@@ -23,7 +23,7 @@ Features include:
 
 ## 🚀 Live Demo
 
-🌐 [View Deployed Project](https://your-username.github.io/your-repo-name](https://iamirsalimi.github.io/portfolio-redux-panel/)
+🌐 [View Deployed Project](https://iamirsalimi.github.io/portfolio-redux-panel/)
 
 ---
 
