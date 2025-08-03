@@ -19,6 +19,8 @@ let removeToastId = null
 export default function Experiences() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [formStatus, setFormStatus] = useState('Add')
+  const [searchTitle, setSearchTitle] = useState('')
+  const [filteredExperiences, setFilteredExperiences] = useState([])
 
   // because we need the objects id to update them and also maybe user between updating an object decided to delete another object and we need another state for Id for removing objects 
   const [editId, setEditId] = useState(null)
@@ -42,7 +44,7 @@ export default function Experiences() {
     country: yup.string()
       .required('country is required'),
     description: yup.string()
-      .min(10 , 'Experience at least must be 10 letters')
+      .min(10, 'Experience at least must be 10 letters')
       .required('description is required')
   })
 
@@ -82,7 +84,6 @@ export default function Experiences() {
     setValue('description', '')
   }
 
-
   const addExperience = data => {
     toastId = toast.loading('adding Experience...')
     dispatch(postExperience({ toastId, newExperienceObj: { ...data } }))
@@ -108,17 +109,21 @@ export default function Experiences() {
     }
   }
 
+  const filterEducationsArrayByExperienceTitle = () => experiences.filter(experience => experience.experienceTitle.toLowerCase().includes(searchTitle.toLowerCase()))
+
   useEffect(() => {
     dispatch(fetchExperiences())
   }, [])
 
   useEffect(() => {
-    if (['fetch-succeed', 'add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
-      toastId = null
-      updateToastId = null
-      removeToastId = null
+    if (status == 'fetch-succeed' || experiences.length > 0) {
+      if (searchTitle) {
+        setFilteredExperiences(filterEducationsArrayByExperienceTitle())
+      } else {
+        setFilteredExperiences(experiences)
+      }
     }
-  }, [status])
+  }, [experiences, searchTitle])
 
   return (
     <>
@@ -230,7 +235,20 @@ export default function Experiences() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <h1 className="text-sky-500 font-bold text-2xl">Experiences</h1>
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-5">
+            <h1 className="text-sky-500 font-bold text-lg md:text-xl lg:text-2xl">Experiences</h1>
+            <div className="w-full xs:w-1/2 md:w-1/3 relative">
+              <input
+                type="text"
+                id="Country"
+                className="peer border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="SEO,Front-End,..."
+                value={searchTitle}
+                onChange={e => setSearchTitle(e.target.value)}
+              />
+              <label for="Country" className="peer-focus:text-blue-500 transition-colors font-bold block mb-2 text-sm text-gray-500 dark:text-white absolute -top-4 left-5 bg-white px-2 py-1">Search</label>
+            </div>
+          </div>
 
           <div className="relative w-full overflow-x-auto bg-gray-100 rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
@@ -257,8 +275,8 @@ export default function Experiences() {
                 </tr>
               </thead>
               <tbody>
-                {status != 'pending' && experiences?.map(experience => (
-                  <tr key={experience.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                {status != 'pending' && filteredExperiences?.map(experience => (
+                  <tr key={experience.id} className={`border-b border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}
                     </th>
@@ -309,6 +327,11 @@ export default function Experiences() {
             {status == 'fetch-failed' && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
+
+            {filteredExperiences.length == 0 && searchTitle && (
+              <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Experience with "{searchTitle}" Title</span>
+            )}
+
           </div>
         </div>
       </div>

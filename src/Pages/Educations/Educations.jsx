@@ -106,10 +106,7 @@ export default function Educations() {
     }
   }
 
-  const filterEducationsArrayByMajor = () => {
-    console.log(educations)
-    return educations.filter(education => education.major.toLowerCase().includes(searchTitle.toLowerCase()))
-  }
+  const filterEducationsArrayByMajor = () => educations.filter(education => education.major.toLowerCase().includes(searchTitle.toLowerCase()))
 
   useEffect(() => {
     dispatch(fetchEducations())
@@ -319,7 +316,6 @@ export default function Educations() {
             {filteredEducations.length == 0 && searchTitle && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Education with "{searchTitle}" Title</span>
             )}
-
           </div>
         </div>
       </div>
