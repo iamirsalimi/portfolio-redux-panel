@@ -19,6 +19,8 @@ let removeToastId = null
 export default function Experiences() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [formStatus, setFormStatus] = useState('Add')
+  const [searchTitle, setSearchTitle] = useState('')
+  const [filteredExperiences, setFilteredExperiences] = useState([])
 
   // because we need the objects id to update them and also maybe user between updating an object decided to delete another object and we need another state for Id for removing objects 
   const [editId, setEditId] = useState(null)
@@ -42,7 +44,7 @@ export default function Experiences() {
     country: yup.string()
       .required('country is required'),
     description: yup.string()
-      .min(10 , 'Experience at least must be 10 letters')
+      .min(10, 'Experience at least must be 10 letters')
       .required('description is required')
   })
 
@@ -82,7 +84,6 @@ export default function Experiences() {
     setValue('description', '')
   }
 
-
   const addExperience = data => {
     toastId = toast.loading('adding Experience...')
     dispatch(postExperience({ toastId, newExperienceObj: { ...data } }))
@@ -108,17 +109,21 @@ export default function Experiences() {
     }
   }
 
+  const filterEducationsArrayByExperienceTitle = () => experiences.filter(experience => experience.experienceTitle.toLowerCase().includes(searchTitle.toLowerCase()))
+
   useEffect(() => {
     dispatch(fetchExperiences())
   }, [])
 
   useEffect(() => {
-    if (['fetch-succeed', 'add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
-      toastId = null
-      updateToastId = null
-      removeToastId = null
+    if (status == 'fetch-succeed' || experiences.length > 0) {
+      if (searchTitle) {
+        setFilteredExperiences(filterEducationsArrayByExperienceTitle())
+      } else {
+        setFilteredExperiences(experiences)
+      }
     }
-  }, [status])
+  }, [experiences, searchTitle])
 
   return (
     <>
@@ -252,19 +257,19 @@ export default function Experiences() {
                   <th scope="col" className="px-6 py-3 text-center">
                     ID
                   </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Experience Title
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Time of Experience
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Location
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Status
                   </th>
                 </tr>
@@ -278,10 +283,10 @@ export default function Experiences() {
                     <td className="px-6 py-2 text-center">
                       {experience.experienceTitle}
                     </td>
-                    <td className="px-6 py-2 text-center">
+                    <td className="px-6 py-2 text-center min-w-52">
                       {experience.time}
                     </td>
-                    <td className="px-6 py-2 text-center">
+                    <td className="px-6 py-2 text-center min-w-52">
                       {experience.city} , {experience.country}
                     </td>
                     <td className="px-6 py-2 flex items-center justify-center gap-2">
@@ -322,6 +327,11 @@ export default function Experiences() {
             {status == 'fetch-failed' && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
+
+            {filteredExperiences.length == 0 && searchTitle && (
+              <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Experience with "{searchTitle}" Title</span>
+            )}
+
           </div>
         </div>
       </div>

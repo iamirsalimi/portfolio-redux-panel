@@ -19,6 +19,8 @@ let removeToastId = null
 export default function Educations() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [formStatus, setFormStatus] = useState('Add')
+  const [searchTitle, setSearchTitle] = useState('')
+  const [filteredEducations, setFilteredEducations] = useState([])
   // because we need the objects id to update them and also maybe user between updating an object decided to delete another object and we need another state for Id for removing objects 
   const [editId, setEditId] = useState(null)
   const [removeId, setRemoveId] = useState(null)
@@ -104,17 +106,21 @@ export default function Educations() {
     }
   }
 
+  const filterEducationsArrayByMajor = () => educations.filter(education => education.major.toLowerCase().includes(searchTitle.toLowerCase()))
+
   useEffect(() => {
     dispatch(fetchEducations())
   }, [])
 
   useEffect(() => {
-    if (['fetch-succeed', 'add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
-      toastId = null
-      updateToastId = null
-      removeToastId = null
+    if (status == 'fetch-succeed' || educations.length > 0) {
+      if (searchTitle) {
+        setFilteredEducations(filterEducationsArrayByMajor())
+      } else {
+        setFilteredEducations(educations)
+      }
     }
-  }, [status])
+  }, [educations , searchTitle])
 
   return (
     <>
@@ -235,19 +241,19 @@ export default function Educations() {
                   <th scope="col" className="px-6 py-3 text-center">
                     ID
                   </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Education Title
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     University
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Location
                   </th>
 
-                  <th scope="col" className="px-6 py-3 text-center">
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
                     Actions
                   </th>
                 </tr>
@@ -307,6 +313,9 @@ export default function Educations() {
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
 
+            {filteredEducations.length == 0 && searchTitle && (
+              <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Education with "{searchTitle}" Title</span>
+            )}
           </div>
         </div>
       </div>

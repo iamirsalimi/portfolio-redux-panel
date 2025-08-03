@@ -53,6 +53,7 @@ export default function SideBar({ theme, changeTheme }) {
                     </button>
                 </div>
 
+
                 <h1 className="text-slate-700 dark:text-white font-bold text-center text-2xl sm:hidden">Portfolio Panel</h1>
             </div>
 

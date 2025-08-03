@@ -98,7 +98,6 @@ export default function PersonalInfos() {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-sky-500 font-bold text-2xl">Personal Informations</h1>
-
             </div>
             <form className="w-full" onSubmit={handleSubmit(editPersonalInfo)}>
                 <div className="w-full grid grid-cols-1 gap-x-2 gap-y-4 mb-6 md:grid-cols-2">

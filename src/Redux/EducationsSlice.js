@@ -68,7 +68,7 @@ let slice = createSlice({
         builder.addCase(postEducation.fulfilled, (state, action) => {
             toast.dismiss(action.meta.arg.toastId)
             toast.success('Education has added successfully')
-            state.educations = [...state.educations, action.meta.arg]
+            state.educations = [...state.educations, action.meta.arg.newEducationObj]
             state.status = 'add-succeed'
             state.err = false
         })
