@@ -4,23 +4,62 @@ import { useForm } from "react-hook-form"
 import { fetchPersonalInformation, editPersonalInformation } from "../../Redux/PersonalInformationSlice"
 import { useDispatch, useSelector } from "react-redux"
 import toast from "react-hot-toast"
+import * as yup from 'yup'
+import { yupResolver } from "@hookform/resolvers/yup"
+
+import InputError from "../../Components/InputError/InputError"
 
 let toastId = null;
 
 export default function PersonalInfos() {
     let dispatch = useDispatch()
 
-    let {status , err , personalInformation} = useSelector(state => state.personalInformation)
+    let { status, err, personalInformation } = useSelector(state => state.personalInformation)
     // console.log(state)
+
+    let schema = yup.object().shape({
+        fullName: yup.string()
+            .min(5, 'fullName at least can be 5 letters')
+            .required('fullName is required'),
+        experience: yup.number('Experience should be number')
+            .min(0, 'Experience at least can be 0')
+            .required('experience is required'),
+        email: yup.string()
+            .email('email is not valid')
+            .required('email is required'),
+        expertise: yup.string()
+            .required('expertise is required'),
+        satisfiedClients: yup.number('satisfiedClients should be number')
+            .required('satisfiedClients is required'),
+        linkedinLink: yup.string()
+            .notRequired(),
+        instagramLink: yup.string()
+            .notRequired(),
+        XLink: yup.string()
+            .notRequired(),
+        githubLink: yup.string()
+            .notRequired(),
+        biography: yup.string()
+            .required('biography is required'),
+    })
 
     let {
         register,
         handleSubmit,
         formState: { errors },
         setValue
-    } = useForm()
+    } = useForm({
+        resolver: yupResolver(schema)
+    })
+
+    // const checkChanges = data => JSON.stringify(personalInformation) == JSON.stringify(data) 
 
     const editPersonalInfo = data => {
+
+        // if(checkChanges(data)) {
+        //     toast.error('New Information is same as old one')
+        //     return ;
+        // } 
         // to have the id of toast , in case if our request got fulfilled or rejected
         toastId = toast.loading('editing your details')
         dispatch(editPersonalInformation(data))
@@ -49,11 +88,11 @@ export default function PersonalInfos() {
 
     useEffect(() => {
         // to check if details updated or faced an error close loading toast and show the error or success toast
-        if(['succeed' , 'failed'].includes(status) && toastId != null){
+        if (['succeed', 'failed'].includes(status) && toastId != null) {
             toast.dismiss(toastId)
             toastId = null
         }
-    } , [status])
+    }, [status])
 
     return (
         <div className="flex flex-col gap-4">
@@ -72,6 +111,9 @@ export default function PersonalInfos() {
                             placeholder="Brad Pit"
                             {...register('fullName')}
                         />
+                        {errors.fullName && (
+                            <span className="text-red-500 text-sm">{errors.fullName.message}</span>
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                         <label for="experience" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Years Of Experience</label>
@@ -82,6 +124,9 @@ export default function PersonalInfos() {
                             placeholder="2,3,..."
                             {...register('experience')}
                         />
+                        {errors.experience && (
+                            <InputError errText={errors.experience.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                         <label for="Email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -92,6 +137,9 @@ export default function PersonalInfos() {
                             placeholder="Test@gmail.com"
                             {...register('email')}
                         />
+                        {errors.email && (
+                            <InputError errText={errors.email.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                         <label for="Expertise" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Expertise</label>
@@ -102,6 +150,9 @@ export default function PersonalInfos() {
                             placeholder="Back-End / Front-End"
                             {...register('expertise')}
                         />
+                        {errors.expertise && (
+                            <InputError errText={errors.expertise.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3">
                         <label for="Clients" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Satisfied Clients</label>
@@ -112,6 +163,9 @@ export default function PersonalInfos() {
                             placeholder="25,26,..."
                             {...register('satisfiedClients')}
                         />
+                        {errors.satisfiedClients && (
+                            <InputError errText={errors.satisfiedClients.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                         <label for="linkedinLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Linkedin Link</label>
@@ -122,6 +176,9 @@ export default function PersonalInfos() {
                             placeholder="Your Linkedin Link"
                             {...register('linkedinLink')}
                         />
+                        {errors.linkedinLink && (
+                            <InputError errText={errors.linkedinLink.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                         <label for="instagramLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instagram Link</label>
@@ -132,6 +189,9 @@ export default function PersonalInfos() {
                             placeholder="Your Instagram Link"
                             {...register('instagramLink')}
                         />
+                        {errors.instagramLink && (
+                            <InputError errText={errors.instagramLink.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                         <label for="xLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">X Link</label>
@@ -142,6 +202,9 @@ export default function PersonalInfos() {
                             placeholder="Your X Link"
                             {...register('XLink')}
                         />
+                        {errors.XLink && (
+                            <InputError errText={errors.XLink.message} />
+                        )}
                     </div>
                     <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                         <label for="githubLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GitHub Link</label>
@@ -152,6 +215,9 @@ export default function PersonalInfos() {
                             placeholder="Your GitHub Link"
                             {...register('githubLink')}
                         />
+                        {errors.githubLink && (
+                            <InputError errText={errors.githubLink.message} />
+                        )}
                     </div>
 
                     <div className="col-start-1 col-end-3">
@@ -163,6 +229,9 @@ export default function PersonalInfos() {
                             placeholder="Write your Biography here..."
                             {...register('biography')}
                         ></textarea>
+                        {errors.biography && (
+                            <InputError errText={errors.biography.message} />
+                        )}
                     </div>
 
                     {/* <div className="col-start-1 col-end-3 flex flex-col items-start justify-center w-full">
@@ -183,7 +252,7 @@ export default function PersonalInfos() {
                         type="submit"
                         className="col-start-1 col-end-3 mt-2 text-white font-bold bg-blue-700 disabled:bg-blue-300 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         disabled={status == 'loading'}
-                    >{status == 'loading' ? 'Editing ...' : 'Edit' }</button>
+                    >{status == 'loading' ? 'Editing ...' : 'Edit'}</button>
 
                 </div>
             </form>

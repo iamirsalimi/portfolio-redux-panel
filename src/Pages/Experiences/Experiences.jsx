@@ -1,13 +1,16 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useForm } from "react-hook-form"
 import toast from 'react-hot-toast'
 import { useDispatch, useSelector } from "react-redux"
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 import { fetchExperiences, postExperience, editExperience as editExperienceHandler, removeExperience as removeExperienceHandler } from "./../../Redux/ExperiencesSlice"
 
 import Modal from './../../Components/Modal/Modal'
 import Loading from '../../Components/Loading/Loading'
+import InputError from '../../Components/InputError/InputError'
 
 let toastId = null
 let updateToastId = null
@@ -26,12 +29,31 @@ export default function Experiences() {
   let { status, err, experiences } = useSelector(state => state.experiences)
   // console.log(experiences)
 
+  let schema = yup.object().shape({
+    experienceTitle: yup.string()
+      .min(3, 'ExperienceTitle at least can be 3 letters')
+      .required('experienceTitle is required'),
+    company: yup.string()
+      .required('company is required'),
+    time: yup.string()
+      .required('time is required'),
+    city: yup.string()
+      .required('city is required'),
+    country: yup.string()
+      .required('country is required'),
+    description: yup.string()
+      .min(10 , 'Experience at least must be 10 letters')
+      .required('description is required')
+  })
+
   let {
     register,
     handleSubmit,
     formState: { errors },
     setValue
-  } = useForm()
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
 
   const handleOpenDeleteModal = () => {
     setShowDeleteModal(true)
@@ -71,7 +93,7 @@ export default function Experiences() {
     updateToastId = toast.loading('updating Experience...')
     setFormStatus('Add')
     console.log({ ...data })
-    dispatch(editExperienceHandler({ toastId : updateToastId , id : editId , newExperienceObj : { ...data }}))
+    dispatch(editExperienceHandler({ toastId: updateToastId, id: editId, newExperienceObj: { ...data } }))
     clearInputs()
   }
 
@@ -114,6 +136,9 @@ export default function Experiences() {
                   placeholder="Back-End Developer / Front-End Developer"
                   {...register('experienceTitle')}
                 />
+                {errors.experienceTitle && (
+                  <InputError errText={errors.experienceTitle.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                 <label for="Company" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Name</label>
@@ -124,6 +149,9 @@ export default function Experiences() {
                   placeholder="Google,Amazon,..."
                   {...register('company')}
                 />
+                {errors.company && (
+                  <InputError errText={errors.company.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                 <label for="ExperienceTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of experience</label>
@@ -134,6 +162,9 @@ export default function Experiences() {
                   placeholder="2022 Summer"
                   {...register('time')}
                 />
+                {errors.time && (
+                  <InputError errText={errors.time.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                 <label for="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
@@ -144,6 +175,9 @@ export default function Experiences() {
                   placeholder="Montreal,NewYork,..."
                   {...register('city')}
                 />
+                {errors.city && (
+                  <InputError errText={errors.city.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3">
                 <label for="Country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
@@ -154,6 +188,9 @@ export default function Experiences() {
                   placeholder="UK,Germany,..."
                   {...register('country')}
                 />
+                {errors.country && (
+                  <InputError errText={errors.country.message} />
+                )}
               </div>
 
               <div className="col-start-1 col-end-3">
@@ -161,10 +198,13 @@ export default function Experiences() {
                 <textarea
                   id="description"
                   rows="4"
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your Experience Description here..."
                   {...register('description')}
                 ></textarea>
+                {errors.description && (
+                  <InputError errText={errors.description.message} />
+                )}
               </div>
 
               <div className={`col-start-1 col-end-3 grid grid-cols-${formStatus == 'Edit' ? 2 : 1} gap-2`}>
@@ -217,7 +257,7 @@ export default function Experiences() {
                 </tr>
               </thead>
               <tbody>
-                {experiences?.map(experience => (
+                {status != 'pending' && experiences?.map(experience => (
                   <tr key={experience.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}

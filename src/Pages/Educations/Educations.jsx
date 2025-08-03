@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import toast from 'react-hot-toast'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 import { fetchEducations, postEducation, editEducation as editEducationHandler, removeEducation as removeEducationHandler } from "./../../Redux/EducationsSlice"
 
 import Modal from './../../Components/Modal/Modal'
 import Loading from '../../Components/Loading/Loading'
+import InputError from '../../Components/InputError/InputError'
 
 let toastId = null
 let updateToastId = null
@@ -26,12 +29,29 @@ export default function Educations() {
   let { status, err, educations } = useSelector(state => state.educations)
   // console.log(educations)
 
+  let schema = yup.object().shape({
+    major: yup.string()
+      .min(3, 'ExperienceTitle at least can be 3 letters')
+      .required('major is required'),
+    university: yup.string()
+      .required('university is required'),
+    time: yup.string()
+      .required('time is required'),
+    country: yup.string()
+      .required('country is required'),
+    description: yup.string()
+      .min(10, 'Experience at least must be 10 letters')
+      .required('description is required')
+  })
+
   let {
     register,
     handleSubmit,
     formState: { errors },
     setValue
-  } = useForm()
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
 
   const handleOpenDeleteModal = () => {
     setShowDeleteModal(true)
@@ -69,7 +89,7 @@ export default function Educations() {
     // console.log('update', data)
     updateToastId = toast.loading('updating Education...')
     setFormStatus('Add')
-    dispatch(editEducationHandler({ toastId: updateToastId , id: editId , newEducationObj: { ...data } }))
+    dispatch(editEducationHandler({ toastId: updateToastId, id: editId, newEducationObj: { ...data } }))
     clearInputs()
   }
 
@@ -89,7 +109,7 @@ export default function Educations() {
   }, [])
 
   useEffect(() => {
-    if (['fetch-succeed' , 'add-succeed' , 'update-succeed' , 'remove-succeed'].includes(status)) {
+    if (['fetch-succeed', 'add-succeed', 'update-succeed', 'remove-succeed'].includes(status)) {
       toastId = null
       updateToastId = null
       removeToastId = null
@@ -113,6 +133,9 @@ export default function Educations() {
                   placeholder="SoftWare Engineering /Cyber Security"
                   {...register('major')}
                 />
+                {errors.major && (
+                  <InputError errText={errors.major.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                 <label for="university" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">place of study</label>
@@ -123,6 +146,9 @@ export default function Educations() {
                   placeholder="Cambridge,Harvard,..."
                   {...register('university')}
                 />
+                {errors.university && (
+                  <InputError errText={errors.university.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
                 <label for="EducationTime" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time of work Education</label>
@@ -133,6 +159,9 @@ export default function Educations() {
                   placeholder="Summer 2022"
                   {...register('time')}
                 />
+                {errors.time && (
+                  <InputError errText={errors.time.message} />
+                )}
               </div>
               <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
                 <label for="Country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
@@ -143,6 +172,9 @@ export default function Educations() {
                   placeholder="UK,Germany,..."
                   {...register('country')}
                 />
+                {errors.country && (
+                  <InputError errText={errors.country.message} />
+                )}
               </div>
 
               <div className="col-start-1 col-end-3">
@@ -150,10 +182,13 @@ export default function Educations() {
                 <textarea
                   id="description"
                   rows="4"
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 min-h-20 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your Education Description here..."
                   {...register('description')}
                 ></textarea>
+                {errors.description && (
+                  <InputError errText={errors.description.message} />
+                )}
               </div>
 
               <div className={`col-start-1 col-end-3 grid grid-cols-${formStatus == 'Edit' ? 2 : 1} gap-2`}>
