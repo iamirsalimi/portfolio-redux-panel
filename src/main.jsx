@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import store from './Redux/store.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+  <BrowserRouter basename='/portfolio-redux-panel'>
     <Provider store={store}>
       <App />
     </Provider>

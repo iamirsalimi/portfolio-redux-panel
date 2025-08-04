@@ -260,7 +260,7 @@ export default function Educations() {
               </thead>
               <tbody>
                 {status != 'pending' && filteredEducations?.map(education => (
-                  <tr key={education.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
+                  <tr key={education.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100  dark:bg-blue-900' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {education.id}
                     </th>
@@ -313,7 +313,7 @@ export default function Educations() {
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
 
-            {filteredEducations.length == 0 && searchTitle && (
+            {['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) && filteredEducations.length == 0 && searchTitle && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Education with "{searchTitle}" Title</span>
             )}
           </div>

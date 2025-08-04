@@ -11,27 +11,27 @@ function App() {
 
   const changeTheme = () => {
     // Determine the new theme based on the current localTheme
-    const newTheme = localTheme === 'light' ? 'dark' : 'light';
-    console.log('Attempting to change theme to:', newTheme, 'Setter:', setLocalTheme);
+    const newTheme = localTheme === 'light' ? 'dark' : 'light'
+    // console.log('Attempting to change theme to:', newTheme, 'Setter:', setLocalTheme);
 
     // Update the state with the new theme
     setLocalTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem('theme', newTheme)
 
     // add or remove the 'dark' class in documentElement
     if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add('dark')
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove('dark')
     }
   };
 
   useEffect(() => {
-    console.log('Current localTheme:', localTheme);
+    console.log('Current localTheme:', localTheme)
     if (localTheme === 'dark') {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('dark')
     } else {
-        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove('dark')
     }
   }, [localTheme])
 
