@@ -102,7 +102,7 @@ export default function Experiences() {
     removeToastId = toast.loading('removing Experience...')
     dispatch(removeExperienceHandler({ toastId: removeToastId, id: removeId }))
     handleCloseDeleteModal()
-    // we should check if user decided to delete an education while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
+    // we should check if user decided to delete an experiences while they was editing them (if we don't do this after deleting an object the edit form of that object is still usable and editing it may cause errors) , so we should change to form state to "Add" to don't face errors    
     if (removeId == editId) {
       setFormStatus('Add')
       clearInputs()
@@ -276,7 +276,7 @@ export default function Experiences() {
               </thead>
               <tbody>
                 {status != 'pending' && filteredExperiences?.map(experience => (
-                  <tr key={experience.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100' : 'bg-white dark:bg-gray-800'}`}>
+                  <tr key={experience.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100   dark:bg-blue-900' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}
                     </th>
@@ -328,7 +328,7 @@ export default function Experiences() {
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">{err}</span>
             )}
 
-            {filteredExperiences.length == 0 && searchTitle && (
+            {['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) && filteredExperiences.length == 0 && searchTitle && (
               <span className="inline-block w-full text-center text-red-500 font-semibold !my-2">There is no Experience with "{searchTitle}" Title</span>
             )}
 
