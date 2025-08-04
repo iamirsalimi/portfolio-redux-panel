@@ -1,0 +1,238 @@
+import { useState, useRef } from 'react'
+
+import Modal from '../../Components/Modal/Modal'
+import Tag from '../../Components/Tag/Tag'
+
+export default function Skills() {
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [formStatus, setFormStatus] = useState('Add')
+  const [tagTitle, setTagTitle] = useState('')
+  const [tags, setTags] = useState([])
+  const [searchTitle , setSearchTitle] = useState('')
+
+  const tagInputRef = useRef(null)
+
+  const handleOpenDeleteModal = () => {
+    setShowDeleteModal(true)
+  }
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+  }
+
+  const showUserInfos = () => {
+    window.scrollTo(0, 0)
+    setFormStatus('Edit')
+  }
+
+  const addExperience = e => {
+    alert('add Education')
+  }
+
+  const editExperience = e => {
+    alert('edit Education')
+  }
+
+  const addTag = e => {
+    e.preventDefault()
+
+    if (tagTitle.trim()) {
+      let newTag = {
+        id: Math.floor(Math.random() * 999),
+        title: tagTitle
+      }
+
+      setTags(prevTags => [...prevTags, newTag])
+      setTagTitle('')
+      tagInputRef.current.focus()
+    }
+  }
+
+  const removeTagHandler = (e, tagId) => {
+    e.preventDefault()
+    setTags(prevTags => prevTags.filter(tag => tag.id !== tagId))
+  }
+
+  return (
+    <>
+      <div className="flex flex-col gap-5 relative">
+
+        <div className="flex flex-col gap-4">
+          <h1 className="text-sky-500 font-bold text-2xl">{formStatus} Project</h1>
+          <form className="w-full">
+            <div className="w-full grid grid-cols-1 gap-x-2 gap-y-4 mb-6 md:grid-cols-2">
+              <div className="col-start-1 col-end-3 md:col-start-1 md:col-end-2">
+                <label for="projectTitle" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Title</label>
+                <input
+                  type="text"
+                  id="projectTitle"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary focus:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Portfolio,AdminPanel,..."
+
+                />
+              </div>
+              <div className="col-start-1 col-end-3 md:col-start-2 md:col-end-3">
+                <label for="githubLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Git Hub Link</label>
+                <input
+                  type="text"
+                  id="githubLink"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary focus:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Project GitHub Link"
+
+                />
+              </div>
+              <div className="col-start-1 col-end-3">
+                <label for="demoLink" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Demo Link</label>
+                <input
+                  type="text"
+                  id="demoLink"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary focus:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Project Demo Link"
+
+                />
+              </div>
+              <div className="relative col-start-1 col-end-3">
+                <label for="frameworks" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Framework and language used</label>
+                <input
+                  type="text"
+                  id="frameworks"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-primary focus:outline-none dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="JavaScript,Django,React,..."
+                  required
+                  value={tagTitle}
+                  onChange={e => setTagTitle(e.target.value)}
+                  ref={tagInputRef}
+                />
+                <button
+                  className="absolute top-1/2 -mt-0.5 right-1 bg-sky-500 transition-colors duration-150 hover:bg-sky-600 text-white font-bold text-center py-1 px-2 rounded-md"
+                  onClick={addTag}
+                >Add Tag</button>
+              </div>
+              {tags.length != 0 && (
+                <ul className="-mt-2 px-0.5 col-start-1 col-end-3 flex items-center gap-2 flex-wrap">
+                  {tags.map(tag => (
+                    <Tag key={tag.id} {...tag} onRemove={removeTagHandler} />
+                  ))
+                  }
+                </ul>
+              )}
+
+              <div className="col-start-1 col-end-3">
+                <label for="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                <textarea
+                  id="description"
+                  rows="4"
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-primary dark:border-none dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your description about project here..."
+
+                ></textarea>
+              </div>
+
+              {/* <div className="col-start-1 col-end-3 flex flex-col items-start justify-center w-full">
+                <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</span>
+                <label for="dropzone-file" className="flex flex-col items-center justify-center w-full h-23 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                    </svg>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or JPEG (MAX. 800x400px)</p>
+                  </div>
+                  <input id="dropzone-file" type="file" className="hidden" accept="image/*" />
+                </label>
+              </div> */}
+
+              <div className={`col-start-1 col-end-3 grid grid-cols-${formStatus == 'Edit' ? 2 : 1} gap-2`}>
+                {formStatus === 'Edit' && (
+                  <button
+                    type="submit"
+                    className="mt-2 text-white font-bold bg-red-700 transition-colors duration-200 hover:bg-red-800 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                    onClick={() => setFormStatus('Add')}
+                  >Clear</button>
+                )}
+
+                <button
+                  type="submit"
+                  className="mt-2 text-white font-bold bg-blue-700 transition-colors duration-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  onClick={formStatus === 'Add' ? addExperience : editExperience}
+                >{formStatus}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-5">
+            <h1 className="text-sky-500 font-bold text-lg md:text-xl lg:text-2xl">Projects</h1>
+            <div className="w-full xs:w-1/2 md:w-1/3 relative">
+              <input
+                type="text"
+                id="Country"
+                className="peer border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-secondary dark:outline-none dark:border-gray-600 dark:placeholder-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Portfolio,Admin Panel,..."
+                value={searchTitle}
+                onChange={e => setSearchTitle(e.target.value)}
+              />
+              <label for="Country" className="peer-focus:text-blue-500 transition-colors font-bold block mb-2 text-sm text-gray-500 dark:text-white absolute -top-4 left-5 bg-white dark:bg-secondary px-2 py-1">Search</label>
+            </div>
+          </div>
+          <div className="relative w-full overflow-x-auto bg-gray-100 dark:bg-gray-900 rounded-lg">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-md overflow-hidden">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    ID
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
+                    Project Title
+                  </th>
+
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
+                    Language and FrameWork Used
+                  </th>
+
+                  <th scope="col" className="px-6 py-3 text-center text-nowrap">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="last:border-none bg-white dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    1
+                  </th>
+                  <td className="px-6 py-2 text-center">
+                    Admin Panel
+                  </td>
+                  <td className="px-6 py-2 text-center">
+                    <ul className="flex items-center justify-center gap-1">
+                      <li>JavaScript</li>
+                      <li>Django</li>
+                      <li>Tailwind Css</li>
+                    </ul>
+                  </td>
+                  <td className="px-6 py-2 flex items-center justify-center gap-2">
+                    <button
+                      className="p-2 rounded-md bg-sky-200 hover:bg-sky-500 transition-colors duration-200 cursor-pointer group"
+                      onClick={showUserInfos}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 stroke-2 stroke-sky-700 transition-colors duration-200 group-hover:stroke-white">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                      </svg>
+                    </button>
+                    <button
+                      className="p-2 rounded-md bg-red-200 hover:bg-red-500 transition-colors duration-200 cursor-pointer group"
+                      onClick={handleOpenDeleteModal}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 stroke-2 stroke-red-700 transition-colors duration-200 group-hover:stroke-white">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      {/* modal */}
+      <Modal title="Project" showModalFlag={showDeleteModal} closeModal={handleCloseDeleteModal} />
+    </>
+  )
+}

@@ -270,7 +270,7 @@ export default function Experiences() {
                   </th>
 
                   <th scope="col" className="px-6 py-3 text-center text-nowrap">
-                    Status
+                    Actions
                   </th>
                 </tr>
               </thead>
