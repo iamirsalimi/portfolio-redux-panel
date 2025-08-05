@@ -113,7 +113,7 @@ export default function Educations() {
   }, [])
 
   useEffect(() => {
-    if (status == 'fetch-succeed' || educations.length > 0) {
+    if (['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) || educations.length > 0) {
       if (searchTitle) {
         setFilteredEducations(filterEducationsArrayByMajor())
       } else {
@@ -259,7 +259,7 @@ export default function Educations() {
                 </tr>
               </thead>
               <tbody>
-                {status != 'pending' && filteredEducations?.map(education => (
+                {!['pending' , 'fetch-failed'].includes(status) && filteredEducations.length != 0 && filteredEducations?.map(education => (
                   <tr key={education.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100  dark:bg-blue-900' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {education.id}

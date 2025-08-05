@@ -116,7 +116,7 @@ export default function Experiences() {
   }, [])
 
   useEffect(() => {
-    if (status == 'fetch-succeed' || experiences.length > 0) {
+    if (['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) || experiences.length > 0) {
       if (searchTitle) {
         setFilteredExperiences(filterEducationsArrayByExperienceTitle())
       } else {
@@ -275,7 +275,7 @@ export default function Experiences() {
                 </tr>
               </thead>
               <tbody>
-                {status != 'pending' && filteredExperiences?.map(experience => (
+                {!['pending' , 'fetch-failed'].includes(status) && filteredExperiences.length != 0 && filteredExperiences?.map(experience => (
                   <tr key={experience.id} className={`border-b last:border-none border-gray-300 dark:border-gray-700 ${searchTitle ? 'bg-sky-100   dark:bg-blue-900' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {experience.id}

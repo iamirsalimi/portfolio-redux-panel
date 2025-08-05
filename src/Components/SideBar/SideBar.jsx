@@ -31,7 +31,7 @@ export default function SideBar({ theme, changeTheme }) {
 
     return (
         <>
-            <div className="flex items-center justify-between pr-5 bg-white dark:bg-secondary px-2 py-2">
+            <div className="flex sm:hidden items-center justify-between pr-5 bg-white dark:bg-secondary px-2 py-2">
                 <div className="flex items-center justify-center gap-2">
                     <button
                         data-drawer-target="default-sidebar"
@@ -58,7 +58,6 @@ export default function SideBar({ theme, changeTheme }) {
                         )}
                     </button>
                 </div>
-
 
                 <h1 className="text-slate-700 dark:text-white font-bold text-center text-2xl sm:hidden">Portfolio Panel</h1>
             </div>

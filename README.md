@@ -54,5 +54,5 @@ Features include:
 
 ## 🖼️ Screenshots
 
-![screenshot1](./public/screenshot1.png)
-![screenshot2](./public/screenshot2.png)
+![screenshot1](./public/dark-project.png)
+![screenshot2](./public/light-project.png)

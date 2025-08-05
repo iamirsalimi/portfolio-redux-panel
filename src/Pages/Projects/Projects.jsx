@@ -36,6 +36,8 @@ export default function Skills() {
   let { err, status, projects } = useSelector(state => state.projects)
   // console.log(projects)
 
+  console.log(projects, filteredProjects)
+
   let schema = yup.object().shape({
     projectTitle: yup.string()
       .min(3, 'ProjectTitle at least can be 3 letters')
@@ -149,7 +151,7 @@ export default function Skills() {
   }, [])
 
   useEffect(() => {
-    if (status == 'fetch-succeed' || projects.length > 0) {
+    if (['fetch-succeed', 'add-succeed', 'remove-succeed', 'update-succeed'].includes(status) || projects.length > 0) {
       if (searchTitle) {
         setFilteredProjects(filterProjectsArrayByProjectTitle())
       } else {
@@ -265,7 +267,10 @@ export default function Skills() {
                   <button
                     type="submit"
                     className="col-start-1 col-end-2 mt-2 text-white font-bold bg-red-700 transition-colors duration-200 hover:bg-red-800 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                    onClick={() => setFormStatus('Add')}
+                    onClick={() => {
+                      setFormStatus('Add')
+                      clearInputs()
+                    }}
                   >Clear</button>
                 )}
 
@@ -314,7 +319,7 @@ export default function Skills() {
                 </tr>
               </thead>
               <tbody>
-                {status != 'pending' && filteredProjects.map(project => (
+                {!['pending' , 'fetch-failed'].includes(status) && filteredProjects.length != 0 && filteredProjects.map(project => (
                   <tr className={`border-b last:border-none border-gray-200 dark:border-gray-700 ${searchTitle ? 'bg-sky-100 dark:bg-blue-900' : 'bg-white dark:bg-gray-800'}`}>
                     <th scope="row" className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {project.id}
@@ -322,11 +327,11 @@ export default function Skills() {
                     <td className="px-6 py-2 text-center">
                       {project.projectTitle}
                     </td>
-                    <td className="px-6 py-2 text-center">
-                      <ul className="flex items-center justify-center gap-1">
+                    <td className="px-6 py-2 text-center max-w-52">
+                      <ul className="flex items-center justify-center flex-wrap gap-1">
                         {project?.frameworkAndLanguages?.map(framework => (
                           <li key={framework.id} className="group">
-                            <span className="text-gray-300 dark:text-gray-600 group-first:hidden"> ,</span> {framework.title}
+                            <span className="text-nowrap text-gray-300 dark:text-gray-600 group-first:hidden"> ,</span> {framework.title}
                           </li>
                         ))}
                       </ul>
