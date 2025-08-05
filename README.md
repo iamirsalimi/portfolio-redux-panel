@@ -46,6 +46,7 @@ Features include:
 | 📝 Personal Info | Name, email, phone, etc. |
 | 🎓 Education | School, degree, year, etc. |
 | 💼 Experience | Position, company, dates, etc. |
+| 💻 Experience | Project Title, Technologies, Links, etc. |
 | 🌗 Dark Mode | Toggle between light & dark |
 | 📡 Supabase Integration | All data is synced with Supabase |
 | 🧩 Redux Toolkit | All state handled via Redux slices |
@@ -54,5 +55,6 @@ Features include:
 
 ## 🖼️ Screenshots
 
-![screenshot1](./public/dark-project.png)
 ![screenshot2](./public/light-project.png)
+
+![screenshot1](./public/dark-project.png)
